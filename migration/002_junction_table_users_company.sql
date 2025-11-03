@@ -2,7 +2,7 @@
 CREATE TABLE company_users (
     user_id INT PRIMARY KEY,
     company_id INT NOT NULL,
-    role INT DEFAULT 1,
+    role INT DEFAULT 1
 );
 CREATE TABLE company_sub_users (
     company_id INT NOT NULL,

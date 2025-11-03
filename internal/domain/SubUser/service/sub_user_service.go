@@ -35,6 +35,9 @@ func (s *Service) GetAllSubUser(companyId int, role int) ([]authmodel.UserEntity
 		return nil, err
 	}
 
+	if len(userIdList) == 0 {
+		return []authmodel.UserEntity{}, nil
+	}
 	users, err := s.repository.FindUsersByIds(userIdList)
 	if err != nil {
 		return nil, err
@@ -56,7 +59,7 @@ func (s *Service) CreateSubUser(subUserRequest subusermodel.SubUserCreateRequest
 			subUserRequest.LastName,
 			subUserRequest.Phone,
 			subUserRequest.Email,
-			"00000000",
+			"12345678",
 		)
 		if err != nil {
 			return nil, err
