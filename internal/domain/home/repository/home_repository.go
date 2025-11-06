@@ -4,7 +4,6 @@ import (
 	homemodel "e-ticket/internal/domain/home/model"
 	"e-ticket/internal/schema"
 	appdatabase "e-ticket/pkg/database"
-	"e-ticket/pkg/utils"
 	"fmt"
 )
 
@@ -72,47 +71,47 @@ FROM %s WHERE(
 func (r *Repository) FindVehiclesByCompanies(companyIds []int) ([]homemodel.VehiclesEntity, error) {
 
 	var sql string = fmt.Sprintf(`
-SELECT
-	%s.%s,
-	%s.%s,
-	%s.%s,
-	%s.%s,
-	%s.%s,
-	%s,
-	%s,
-	%s,
-	%s,
-	%s.%s
-FROM %s
-LEFT JOIN %s ON
-	%s.%s=%s.%s
-LEFT JOIN %s ON
-	%s.%s=%s.%s
-WHERE %s IN (%s)
-`,
-		schema.VehiclesTableName, schema.Vehicle_id,
-		schema.Users, schema.Users_first_name,
-		schema.Users, schema.Users_last_name,
-		schema.Companies, schema.Companies_name,
-		schema.VehiclesTableName, schema.Vehicles_name,
-		schema.Vehicles_temporary_name,
-		schema.Vehicles_license_number,
-		schema.Vehicles_type,
-		schema.Vehicles_capacity,
-		schema.VehiclesTableName, schema.Vehicles_is_active,
+// SELECT
+// 	%s.%s,
+// 	%s.%s,
+// 	%s.%s,
+// 	%s.%s,
+// 	%s.%s,
+// 	%s,
+// 	%s,
+// 	%s,
+// 	%s,
+// 	%s.%s
+// FROM %s
+// LEFT JOIN %s ON
+// 	%s.%s=%s.%s
+// LEFT JOIN %s ON
+// 	%s.%s=%s.%s
+// WHERE %s IN (%s)
+// `,
+	// 		schema.VehiclesTableName, schema.Vehicle_id,
+	// 		schema.Users, schema.Users_first_name,
+	// 		schema.Users, schema.Users_last_name,
+	// 		schema.Companies, schema.Companies_name,
+	// 		schema.VehiclesTableName, schema.Vehicles_name,
+	// 		schema.Vehicles_temporary_name,
+	// 		schema.Vehicles_license_number,
+	// 		schema.Vehicles_type,
+	// 		schema.Vehicles_capacity,
+	// 		schema.VehiclesTableName, schema.Vehicles_is_active,
 
-		schema.VehiclesTableName,
+	// 		schema.VehiclesTableName,
 
-		schema.Users,
-		schema.VehiclesTableName, schema.Vehicles_fk_owner_id,
-		schema.Users, schema.Users_id,
+	// 		schema.Users,
+	// 		schema.VehiclesTableName, schema.Vehicles_fk_owner_id,
+	// 		schema.Users, schema.Users_id,
 
-		schema.Companies,
-		schema.VehiclesTableName, schema.Vehicles_fk_company_id,
-		schema.Companies, schema.Companies_id,
+	// 		schema.Companies,
+	// 		schema.VehiclesTableName, schema.Vehicles_fk_company_id,
+	// 		schema.Companies, schema.Companies_id,
 
-		schema.Vehicles_fk_company_id,
-		utils.JoinArray(companyIds),
+	// 		schema.Vehicles_fk_company_id,
+	// 		utils.JoinArray(companyIds),
 	)
 
 	rows, err := r.db.PQ.Query(sql)
@@ -159,36 +158,36 @@ WHERE %s IN (%s)
 func (r *Repository) FindOwnersByVehicles(vehiclesIds []int) ([]homemodel.OwnerEntity, error) {
 
 	var sql string = fmt.Sprintf(`
-SELECT
-	%s.%s,
-	%s.%s,
-	%s.%s,
-	%s.%s,
-	%s.%s,
-	%s.%s,
-	count(%s.%s)
-FROM %s
-LEFT JOIN %s ON
-	%s.%s=%s.%s
-WHERE %s.%s IN (%s)
-GROUP BY %s.%s`,
-		schema.Users, schema.Users_id,
-		schema.Users, schema.Users_first_name,
-		schema.Users, schema.Users_last_name,
-		schema.Users, schema.Users_email,
-		schema.Users, schema.Users_phone,
-		schema.Users, schema.Users_is_active,
-		schema.Users, schema.Users_id,
+// SELECT
+// 	%s.%s,
+// 	%s.%s,
+// 	%s.%s,
+// 	%s.%s,
+// 	%s.%s,
+// 	%s.%s,
+// 	count(%s.%s)
+// FROM %s
+// LEFT JOIN %s ON
+// 	%s.%s=%s.%s
+// WHERE %s.%s IN (%s)
+// GROUP BY %s.%s`,
+	// 		schema.Users, schema.Users_id,
+	// 		schema.Users, schema.Users_first_name,
+	// 		schema.Users, schema.Users_last_name,
+	// 		schema.Users, schema.Users_email,
+	// 		schema.Users, schema.Users_phone,
+	// 		schema.Users, schema.Users_is_active,
+	// 		schema.Users, schema.Users_id,
 
-		schema.VehiclesTableName,
+	// 		schema.VehiclesTableName,
 
-		schema.Users,
-		schema.VehiclesTableName, schema.Vehicles_fk_owner_id,
-		schema.Users, schema.Users_id,
+	// 		schema.Users,
+	// 		schema.VehiclesTableName, schema.Vehicles_fk_owner_id,
+	// 		schema.Users, schema.Users_id,
 
-		schema.VehiclesTableName, schema.Vehicle_id,
-		utils.JoinArray(vehiclesIds),
-		schema.Users, schema.Users_id,
+	// 		schema.VehiclesTableName, schema.Vehicle_id,
+	// 		utils.JoinArray(vehiclesIds),
+	// 		schema.Users, schema.Users_id,
 	)
 
 	rows, err := r.db.PQ.Query(sql)
@@ -224,37 +223,37 @@ GROUP BY %s.%s`,
 func (r *Repository) FindVehiclesByOwner(vehicleOwnerId int) ([]homemodel.VehiclesEntity, error) {
 
 	var sql string = fmt.Sprintf(`
-SELECT
-%s.%s,
-%s.%s,
-%s.%s,
-%s,
-%s,
-%s,
-%s,
-%s.%s
-FROM %s
-LEFT JOIN %s
-ON %s.%s = %s.%s
-WHERE %s.%s = %d;
-`,
-		schema.VehiclesTableName, schema.Vehicle_id,
-		schema.Companies, schema.Companies_name,
-		schema.VehiclesTableName, schema.Vehicles_name,
-		schema.Vehicles_temporary_name,
-		schema.Vehicles_license_number,
-		schema.Vehicles_type,
-		schema.Vehicles_capacity,
-		schema.VehiclesTableName, schema.Vehicles_is_active,
+// SELECT
+// %s.%s,
+// %s.%s,
+// %s.%s,
+// %s,
+// %s,
+// %s,
+// %s,
+// %s.%s
+// FROM %s
+// LEFT JOIN %s
+// ON %s.%s = %s.%s
+// WHERE %s.%s = %d;
+// `,
+	// 		schema.VehiclesTableName, schema.Vehicle_id,
+	// 		schema.Companies, schema.Companies_name,
+	// 		schema.VehiclesTableName, schema.Vehicles_name,
+	// 		schema.Vehicles_temporary_name,
+	// 		schema.Vehicles_license_number,
+	// 		schema.Vehicles_type,
+	// 		schema.Vehicles_capacity,
+	// 		schema.VehiclesTableName, schema.Vehicles_is_active,
 
-		schema.VehiclesTableName,
-		schema.Companies,
+	// 		schema.VehiclesTableName,
+	// 		schema.Companies,
 
-		schema.VehiclesTableName, schema.Vehicles_fk_company_id,
-		schema.Companies, schema.Companies_id,
+	// 		schema.VehiclesTableName, schema.Vehicles_fk_company_id,
+	// 		schema.Companies, schema.Companies_id,
 
-		schema.VehiclesTableName, schema.Vehicles_fk_owner_id,
-		vehicleOwnerId,
+	// 		schema.VehiclesTableName, schema.Vehicles_fk_owner_id,
+	// 		vehicleOwnerId,
 	)
 
 	rows, err := r.db.PQ.Query(sql)

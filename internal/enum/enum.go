@@ -1,25 +1,31 @@
 package enum
 
-type UserRoleType int
+type SuperUserRoleType int
 
 const (
-	CompanyOwner UserRoleType = iota + 1
-	BusOwner
+	Owner SuperUserRoleType = iota + 1
+	Manager
+)
+
+type SubUserRoleType int
+
+const (
+	VehicleOwner SubUserRoleType = iota + 1
 	CounterManager
-	Passanger
+	// Passanger
 )
 
 type VehicleType int
 
 const (
-	AcBus    VehicleType = 1
-	NonAcBus VehicleType = 2
+	NonAcBus VehicleType = iota + 1
+	AcBus
 )
 
-type Permission int
+type PermissionType int
 
 const (
-	Hide Permission = iota + 1
+	Hide PermissionType = iota + 1
 	View
 	Required
 )

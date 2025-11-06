@@ -24,6 +24,7 @@ func SetupRouter(db *appdatabase.DbEntity) *gin.Engine {
 
 		HomeRoutes(v1Route, db)
 		SubUserRoutes(v1Route, db)
+		VehicleRoutes(v1Route, db)
 	}
 
 	// v2 := api.Group("/v2")

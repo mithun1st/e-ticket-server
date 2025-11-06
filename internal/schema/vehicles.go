@@ -1,11 +1,11 @@
 package schema
 
 const (
-	VehiclesTableName = "vehicles"
+	Vehicles = "vehicles"
 )
 
 const (
-	Vehicle_id              string = "id"
+	Vehicles_id             string = "id"
 	Vehicles_fk_owner_id    string = "fk_owner_id"
 	Vehicles_fk_company_id  string = "fk_company_id"
 	Vehicles_name           string = "name"

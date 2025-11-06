@@ -1,9 +1,9 @@
 package router
 
 import (
-	subuserhandler "e-ticket/internal/domain/SubUser/handler"
-	subuserrepository "e-ticket/internal/domain/SubUser/repository"
-	subuserservice "e-ticket/internal/domain/SubUser/service"
+	subuserhandler "e-ticket/internal/domain/sub_user/handler"
+	subuserrepository "e-ticket/internal/domain/sub_user/repository"
+	subuserservice "e-ticket/internal/domain/sub_user/service"
 	appdatabase "e-ticket/pkg/database"
 
 	"github.com/gin-gonic/gin"

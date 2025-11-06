@@ -1,7 +1,7 @@
 package authrepository
 
 import (
-	authmodel "e-ticket/internal/domain/auth/model"
+	subusermodel "e-ticket/internal/domain/sub_user/model"
 	"e-ticket/internal/schema"
 	appdatabase "e-ticket/pkg/database"
 	"fmt"
@@ -15,7 +15,7 @@ func NewAuthRepository(db *appdatabase.DbEntity) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindUser(email string, phone string, password string) (*authmodel.UserEntity, error) {
+func (r *Repository) FindUser(email string, phone string, password string) (*subusermodel.UserEntity, error) {
 
 	var sql string = fmt.Sprintf(`
 SELECT
@@ -51,7 +51,7 @@ FROM %s WHERE(
 		return nil, err
 	}
 
-	var user authmodel.UserEntity
+	var user subusermodel.UserEntity
 
 	for rows.Next() {
 		err := rows.Scan(

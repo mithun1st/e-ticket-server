@@ -30,7 +30,7 @@ func (h *Handler) GetCompanyHome(ctx *gin.Context) {
 	home, err := h.service.GetCompanyHomeData(query.UserId)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusUnauthorized, err))
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
 		return
 	}
 	ctx.JSON(appresponse.Success(http.StatusOK, home))
@@ -49,7 +49,7 @@ func (h *Handler) GetOwnerHome(ctx *gin.Context) {
 	home, err := h.service.GetOwnerHomeData(query.UserId)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusUnauthorized, err))
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
 		return
 	}
 	ctx.JSON(appresponse.Success(http.StatusOK, home))
