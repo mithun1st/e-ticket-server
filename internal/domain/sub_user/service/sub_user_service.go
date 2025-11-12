@@ -14,23 +14,9 @@ func NewSubUserService(repository subuserrepository.Repository) *Service {
 	return &Service{repository: &repository}
 }
 
-// func (s *Service) GetSubUser(id int) (*subusermodel.SubUserEntity, error) {
+func (s *Service) GetAllSubUser(companyId int, role *int) ([]subusermodel.UserEntity, error) {
 
-// 	subUser, err := s.repository.FindById(id)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	if subUser.Id != id {
-// 		return nil, errors.New("not match")
-// 	}
-
-// 	return subUser, nil
-// }
-
-func (s *Service) GetAllSubUser(companyId int, role int) ([]subusermodel.UserEntity, error) {
-
-	userIdList, err := s.repository.FindUsersIdByCompanyAndRole(companyId, role)
+	userIdList, err := s.repository.FindUsersIdBy(companyId, role)
 	if err != nil {
 		return nil, err
 	}
@@ -46,9 +32,9 @@ func (s *Service) GetAllSubUser(companyId int, role int) ([]subusermodel.UserEnt
 	return users, nil
 }
 
-func (s *Service) CreateSubUser(subUserRequest subusermodel.SubUserCreateRequest) (bool, error) {
+func (s *Service) CreateSubUser(companyId int, subUserRequest subusermodel.SubUserCreateRequest) (bool, error) {
 
-	user, err := s.repository.FindIsUserByPhone(subUserRequest.Phone)
+	user, err := s.repository.FindUserByPhone(subUserRequest.Phone)
 	if err != nil {
 		return false, err
 	}
@@ -65,14 +51,14 @@ func (s *Service) CreateSubUser(subUserRequest subusermodel.SubUserCreateRequest
 			return false, err
 		}
 		if newUserCreate {
-			user, err = s.repository.FindIsUserByPhone(subUserRequest.Phone)
+			user, err = s.repository.FindUserByPhone(subUserRequest.Phone)
 			if err != nil {
 				return false, err
 			}
 		}
 	}
 
-	isCreated, err := s.repository.InsertCompanySubUser(subUserRequest.CompanyId, user.Id, subUserRequest.Role)
+	isCreated, err := s.repository.InsertCompanySubUser(companyId, user.Id, subUserRequest.Role)
 	if err != nil {
 		return false, err
 	}

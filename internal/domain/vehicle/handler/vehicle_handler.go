@@ -19,15 +19,22 @@ func NewVehicleHandler(service vehicleservice.Service) *Handler {
 
 func (h *Handler) GetAllVehicle(ctx *gin.Context) {
 
+	var uri vehiclemodel.VehicleUri
 	var query vehiclemodel.VehicleQuery
 
-	err := ctx.ShouldBindQuery(&query)
+	err := ctx.ShouldBindUri(&uri)
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
 		return
 	}
 
-	list, err := h.service.GetAllVehicle(query.CompanyId, query.UserId)
+	err = ctx.ShouldBindQuery(&query)
+	if err != nil {
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
+		return
+	}
+
+	list, err := h.service.GetAllVehicle(uri.CompanyId, query.UserId)
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
@@ -38,15 +45,22 @@ func (h *Handler) GetAllVehicle(ctx *gin.Context) {
 
 func (h *Handler) CreateVehicle(ctx *gin.Context) {
 
+	var uri vehiclemodel.VehicleUri
 	var vehicle vehiclemodel.VehicleCreateRequest
 
-	err := ctx.ShouldBindBodyWithJSON(&vehicle)
+	err := ctx.ShouldBindUri(&uri)
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
 		return
 	}
 
-	list, err := h.service.CreateVehicle(vehicle)
+	err = ctx.ShouldBindBodyWithJSON(&vehicle)
+	if err != nil {
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
+		return
+	}
+
+	list, err := h.service.CreateVehicle(uri.CompanyId, vehicle)
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))

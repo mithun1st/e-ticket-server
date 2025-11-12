@@ -16,7 +16,7 @@ func NewVehicleRepository(db *appdatabase.DbEntity) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindVehiclesByCompany(companyId int) ([]vehiclemodel.VehicleEntity, error) {
+func (r *Repository) FindVehiclesByCompanyAndOwner(companyId int, userId *int) ([]vehiclemodel.VehicleEntity, error) {
 
 	var sql string = fmt.Sprintf(`
 SELECT
@@ -31,64 +31,6 @@ SELECT
 %s
 FROM %s
 WHERE
-%s=%d
-`,
-		schema.Vehicles_id,
-		schema.Vehicles_fk_owner_id,
-		schema.Vehicles_fk_company_id,
-		schema.Vehicles_name,
-		schema.Vehicles_temporary_name,
-		schema.Vehicles_license_number,
-		schema.Vehicles_type,
-		schema.Vehicles_capacity,
-		schema.Vehicles_is_active,
-		schema.Vehicles,
-		schema.Vehicles_fk_company_id,
-		companyId,
-	)
-	rows, err := r.db.PQ.Query(sql)
-	if err != nil {
-		return nil, err
-	}
-	var list []vehiclemodel.VehicleEntity
-	for rows.Next() {
-		var vehicleEntity vehiclemodel.VehicleEntity
-		err := rows.Scan(
-			&vehicleEntity.Id,
-			&vehicleEntity.OwnerId,
-			&vehicleEntity.CompanyId,
-			&vehicleEntity.Name,
-			&vehicleEntity.TemporaryName,
-			&vehicleEntity.LicenseNumber,
-			&vehicleEntity.VehicleType,
-			&vehicleEntity.Capacity,
-			&vehicleEntity.IsActive,
-		)
-		if err != nil {
-			return nil, err
-		}
-		list = append(list, vehicleEntity)
-	}
-	return list, nil
-}
-
-func (r *Repository) FindVehiclesByCompanyAndOwner(companyId int, userId int) ([]vehiclemodel.VehicleEntity, error) {
-
-	var sql string = fmt.Sprintf(`
-SELECT
-%s,
-%s,
-%s,
-%s,
-%s,
-%s,
-%s,
-%s,
-%s
-FROM %s
-WHERE
-%s=%d
-AND
 %s=%d
 `,
 		schema.Vehicles_id,
@@ -102,8 +44,16 @@ AND
 		schema.Vehicles_is_active,
 		schema.Vehicles,
 		schema.Vehicles_fk_company_id, companyId,
-		schema.Vehicles_fk_owner_id, userId,
 	)
+
+	if userId != nil {
+		str := fmt.Sprintf(`
+AND
+%s=%d`,
+			schema.Vehicles_fk_owner_id, *userId)
+		sql = sql + str
+	}
+
 	rows, err := r.db.PQ.Query(sql)
 	if err != nil {
 		return nil, err
@@ -130,7 +80,7 @@ AND
 	return list, nil
 }
 
-func (r *Repository) InsertVehicle(vehicle vehiclemodel.VehicleCreateRequest) (bool, error) {
+func (r *Repository) InsertVehicle(companyId int, vehicle vehiclemodel.VehicleCreateRequest) (bool, error) {
 
 	var sql string = fmt.Sprintf(`
 INSERT INTO %s(
@@ -163,7 +113,7 @@ INSERT INTO %s(
 		schema.Vehicles_capacity,
 
 		vehicle.OwnerId,
-		vehicle.CompanyId,
+		companyId,
 
 		vehicle.Name,
 		utils.NilToStrDB(vehicle.TemporaryName),

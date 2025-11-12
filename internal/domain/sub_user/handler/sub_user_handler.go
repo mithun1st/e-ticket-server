@@ -17,61 +17,23 @@ func NewSubUserHandler(service subuserservice.Service) *Handler {
 	return &Handler{service: &service}
 }
 
-// func (h *Handler) GetSubUser(ctx *gin.Context) {
-
-// var header subusermodel.SubUserHeader
-// var path subusermodel.SubUserPath
-// 	var query subusermodel.SubUserQuery
-// 	var request subusermodel.SubUserRequest
-
-// 	err := ctx.ShouldBindHeader(&header)
-// 	if err != nil {
-// 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
-// 		return
-// 	}
-
-// 	err = ctx.ShouldBindUri(&path)
-// 	if err != nil {
-// 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
-// 		return
-// 	}
-
-// 	err = ctx.ShouldBindQuery(&query)
-// 	if err != nil {
-// 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
-// 		return
-// 	}
-
-// 	err = ctx.ShouldBindBodyWithJSON(&request)
-// 	if err != nil {
-// 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
-// 		return
-// 	}
-
-// 	subUser, err := h.service.GetSubUser(request.Id)
-
-// 	if err != nil {
-// 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusUnauthorized, err))
-// 		return
-// 	}
-// 	ctx.JSON(appresponse.Success(http.StatusOK, map[string]any{
-// 		"header":  header,
-// 		"query":   query,
-// 		"request": request,
-// 		"result":  subUser,
-// 	}))
-// }
-
 func (h *Handler) GetAllSubUser(ctx *gin.Context) {
+	var uri subusermodel.SubUserUri
 	var query subusermodel.SubUserQuery
 
-	err := ctx.ShouldBindQuery(&query)
+	err := ctx.ShouldBindUri(&uri)
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
 		return
 	}
 
-	list, err := h.service.GetAllSubUser(query.CompanyId, *query.Role)
+	err = ctx.ShouldBindQuery(&query)
+	if err != nil {
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
+		return
+	}
+
+	list, err := h.service.GetAllSubUser(uri.CompanyId, query.Role)
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusUnauthorized, err))
 		return
@@ -80,15 +42,22 @@ func (h *Handler) GetAllSubUser(ctx *gin.Context) {
 }
 
 func (h *Handler) CreateSubUser(ctx *gin.Context) {
+	var uri subusermodel.SubUserUri
 	var request subusermodel.SubUserCreateRequest
 
-	err := ctx.ShouldBindBodyWithJSON(&request)
+	err := ctx.ShouldBindUri(&uri)
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
 		return
 	}
 
-	isCreated, err := h.service.CreateSubUser(request)
+	err = ctx.ShouldBindBodyWithJSON(&request)
+	if err != nil {
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
+		return
+	}
+
+	isCreated, err := h.service.CreateSubUser(uri.CompanyId, request)
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusUnauthorized, err))
 		return

@@ -23,7 +23,7 @@ func AuthRoutes(rg *gin.RouterGroup, db *appdatabase.DbEntity) {
 			loginRouter.POST("/company", func(ctx *gin.Context) {
 				handler.GetAuthCompany(ctx)
 			})
-			loginRouter.POST("/subuser", func(ctx *gin.Context) {
+			loginRouter.POST("", func(ctx *gin.Context) {
 				handler.GetAuthVehicle(ctx)
 			})
 		}

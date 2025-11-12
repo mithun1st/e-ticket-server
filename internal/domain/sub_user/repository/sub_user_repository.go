@@ -16,21 +16,30 @@ func NewSubUserRepository(db *appdatabase.DbEntity) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindUsersIdByCompanyAndRole(companyId int, role int) ([]int, error) {
-	var sql string = fmt.Sprintf(`
-SELECT %s 
-FROM %s WHERE
-%s=%d AND
-%s=%d
-`,
+func (r *Repository) FindUsersIdBy(companyId int, role *int) ([]int, error) {
+	var sql string
+
+	sql = fmt.Sprintf(`
+	SELECT %s 
+	FROM %s WHERE
+	%s=%d
+	`,
 		schema.CompanySubUsers_user_id,
 		schema.CompanySubUsers,
 		schema.CompanySubUsers_company_id,
 		companyId,
-		schema.CompanySubUsers_role,
-		role,
 	)
 
+	if role != nil {
+		str := fmt.Sprintf(`
+AND
+%s=%d
+`,
+			schema.CompanySubUsers_role,
+			*role,
+		)
+		sql = sql + str
+	}
 	rows, err := r.db.PQ.Query(sql)
 	if err != nil {
 		return nil, err
@@ -97,7 +106,7 @@ FROM %s WHERE
 	return users, nil
 }
 
-func (r *Repository) FindIsUserByPhone(phone string) (*subusermodel.UserEntity, error) {
+func (r *Repository) FindUserByPhone(phone string) (*subusermodel.UserEntity, error) {
 	var sql string = fmt.Sprintf(`
 SELECT
 %s,

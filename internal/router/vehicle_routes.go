@@ -16,11 +16,11 @@ func VehicleRoutes(rg *gin.RouterGroup, db *appdatabase.DbEntity) {
 	service := vehicleservice.NewVehicleService(*repository)
 	handler := vehiclehandler.NewVehicleHandler(*service)
 
-	vehicleRouter := rg.Group("/vehicle")
+	vehicleRouter := rg.Group("/vehicles")
 	{
 		// vehicleRouter.GET("/:vehicleId", handler.GetVehicle)
-		vehicleRouter.GET("/all", handler.GetAllVehicle)
-		vehicleRouter.POST("/create", handler.CreateVehicle)
+		vehicleRouter.GET("", handler.GetAllVehicle)
+		vehicleRouter.POST("", handler.CreateVehicle)
 		// vehicleRouter.PUT("/:vehicleId")
 		// vehicleRouter.DELETE("/:vehicleId")
 	}

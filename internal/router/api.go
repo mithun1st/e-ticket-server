@@ -22,9 +22,12 @@ func SetupRouter(db *appdatabase.DbEntity) *gin.Engine {
 		// Apply middleware
 		v1Route.Use(middleware.AuthToken)
 
-		HomeRoutes(v1Route, db)
-		SubUserRoutes(v1Route, db)
-		VehicleRoutes(v1Route, db)
+		companyRoutes := v1Route.Group("company/:companyId")
+		{
+			HomeRoutes(companyRoutes, db)
+			SubUserRoutes(companyRoutes, db)
+			VehicleRoutes(companyRoutes, db)
+		}
 	}
 
 	// v2 := api.Group("/v2")

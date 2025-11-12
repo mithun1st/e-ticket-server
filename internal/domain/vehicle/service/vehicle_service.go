@@ -18,12 +18,7 @@ func (s *Service) GetAllVehicle(companyId int, userId *int) ([]vehiclemodel.Vehi
 	var list []vehiclemodel.VehicleEntity
 	var err error
 
-	if userId == nil {
-		list, err = s.repository.FindVehiclesByCompany(companyId)
-
-	} else {
-		list, err = s.repository.FindVehiclesByCompanyAndOwner(companyId, *userId)
-	}
+	list, err = s.repository.FindVehiclesByCompanyAndOwner(companyId, userId)
 
 	if err != nil {
 		return nil, err
@@ -32,9 +27,9 @@ func (s *Service) GetAllVehicle(companyId int, userId *int) ([]vehiclemodel.Vehi
 	return list, nil
 }
 
-func (s *Service) CreateVehicle(vehicle vehiclemodel.VehicleCreateRequest) (bool, error) {
+func (s *Service) CreateVehicle(companyId int, vehicle vehiclemodel.VehicleCreateRequest) (bool, error) {
 
-	isCreated, err := s.repository.InsertVehicle(vehicle)
+	isCreated, err := s.repository.InsertVehicle(companyId, vehicle)
 	if err != nil {
 		return false, err
 	}

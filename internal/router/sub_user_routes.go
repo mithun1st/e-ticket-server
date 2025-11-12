@@ -16,11 +16,11 @@ func SubUserRoutes(rg *gin.RouterGroup, db *appdatabase.DbEntity) {
 	service := subuserservice.NewSubUserService(*repository)
 	handler := subuserhandler.NewSubUserHandler(*service)
 
-	subUserRouter := rg.Group("/subuser")
+	subUserRouter := rg.Group("/subusers")
 	{
 		// subUserRouter.GET("/:subUserId", handler.GetSubUser)
-		subUserRouter.GET("/all", handler.GetAllSubUser)
-		subUserRouter.POST("/create", handler.CreateSubUser)
+		subUserRouter.GET("", handler.GetAllSubUser)
+		subUserRouter.POST("", handler.CreateSubUser)
 		// subUserRouter.PUT("/:subUserId")
 		// subUserRouter.DELETE("/:subUserId")
 	}
