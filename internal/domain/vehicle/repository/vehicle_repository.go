@@ -116,8 +116,8 @@ INSERT INTO %s(
 		companyId,
 
 		vehicle.Name,
-		utils.NilToStrDB(vehicle.TemporaryName),
-		utils.NilToStrDB(vehicle.LicenseNumber),
+		utils.DbNilToStr(vehicle.TemporaryName),
+		utils.DbNilToStr(vehicle.LicenseNumber),
 		vehicle.VehicleType,
 		vehicle.Capacity,
 	)

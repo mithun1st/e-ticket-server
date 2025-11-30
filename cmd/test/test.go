@@ -15,7 +15,7 @@ func main() {
 	var s1 *int = nil
 	var s2 *int = &tem
 
-	str := fmt.Sprintf("hello %s, hello1 %s", utils.NilToStrDB(s1), utils.NilToStrDB(s2))
+	str := fmt.Sprintf("hello %s, hello1 %s", utils.DbNilToStr(s1), utils.DbNilToStr(s2))
 	fmt.Println(str)
 	return
 
@@ -26,8 +26,8 @@ func main() {
 	// fmt.Println(nums[1])
 
 	fmt.Println(nums, alph)
-	fmt.Println(utils.JoinArray(nums))
-	fmt.Println(utils.JoinArray(alph))
+	fmt.Println(utils.DbJoinArray(nums))
+	fmt.Println(utils.DbJoinArray(alph))
 	return
 
 	appenviroment.Set(appenviroment.Development)

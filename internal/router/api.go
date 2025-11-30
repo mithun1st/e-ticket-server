@@ -27,6 +27,7 @@ func SetupRouter(db *appdatabase.DbEntity) *gin.Engine {
 			HomeRoutes(companyRoutes, db)
 			SubUserRoutes(companyRoutes, db)
 			VehicleRoutes(companyRoutes, db)
+			RouteCounterRoutes(companyRoutes, db)
 		}
 	}
 

@@ -35,7 +35,7 @@ func (h *Handler) GetAllSubUser(ctx *gin.Context) {
 
 	list, err := h.service.GetAllSubUser(uri.CompanyId, query.Role)
 	if err != nil {
-		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusUnauthorized, err))
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
 		return
 	}
 	ctx.JSON(appresponse.Success(http.StatusOK, list))
@@ -59,7 +59,7 @@ func (h *Handler) CreateSubUser(ctx *gin.Context) {
 
 	isCreated, err := h.service.CreateSubUser(uri.CompanyId, request)
 	if err != nil {
-		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusUnauthorized, err))
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
 		return
 	}
 	ctx.JSON(appresponse.Success(http.StatusCreated, isCreated))

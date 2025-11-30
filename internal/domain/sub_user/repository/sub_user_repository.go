@@ -80,7 +80,7 @@ FROM %s WHERE
 		schema.Users,
 
 		schema.Users_id,
-		utils.JoinArray(userIdList),
+		utils.DbJoinArray(userIdList),
 	)
 
 	rows, err := r.db.PQ.Query(sql)
@@ -184,9 +184,9 @@ INSERT INTO %s (
 		schema.Users_password_hash,
 
 		firstName,
-		utils.NilToStrDB(lastName),
+		utils.DbNilToStr(lastName),
 		phone,
-		utils.NilToStrDB(email),
+		utils.DbNilToStr(email),
 		password,
 	)
 
