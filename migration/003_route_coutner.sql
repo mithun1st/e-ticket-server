@@ -15,7 +15,7 @@ CREATE TABLE route (
     id  SERIAL PRIMARY KEY,
     fk_company_id INT NOT NULL,
     name VARCHAR(50) NOT NULL,
-    note VARCHAR(200) NOT NULL,
+    note VARCHAR(200),
     is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 CREATE TABLE route_counter (

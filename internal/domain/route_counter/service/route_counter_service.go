@@ -25,27 +25,30 @@ func (s *Service) GetCounters(companyId int) ([]routecountermodel.CounterEntity,
 
 func (s *Service) CreateCounters(companyId int, counter routecountermodel.CounterCreateEntity) (bool, error) {
 
-	counters, err := s.repository.InsertCounter(companyId, counter)
+	isCreated, err := s.repository.InsertCounter(companyId, counter)
 	if err != nil {
 		return false, err
 	}
 
-	return counters, nil
+	return isCreated, nil
 }
 
-// func (s *Service) CreateCounter(counter routecountermodel.CounterEntity)(bool,error){
+func (s *Service) GetRoutes(companyId int) ([]routecountermodel.RouteEntity, error) {
 
-// }
-// func (s *Service) GetAllRouteCounter() ([]routecountermodel.RouteCounterEntity, error) {
+	routes, err := s.repository.FindRoutesByCompanyId(companyId)
+	if err != nil {
+		return nil, err
+	}
 
-// 	list, err := s.repository.FindAll()
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	return routes, nil
+}
 
-// 	if len(list) == 0 {
-// 		return nil, errors.New("empty list")
-// 	}
+func (s *Service) CreateRoute(companyId int, route routecountermodel.RouteCreateEntity) (bool, error) {
 
-// 	return list, nil
-// }
+	isCreated, err := s.repository.InsertRoute(companyId, route)
+	if err != nil {
+		return false, err
+	}
+
+	return isCreated, nil
+}

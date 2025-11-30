@@ -60,11 +60,11 @@ func (h *Handler) CreateVehicle(ctx *gin.Context) {
 		return
 	}
 
-	list, err := h.service.CreateVehicle(uri.CompanyId, vehicle)
+	isCreated, err := h.service.CreateVehicle(uri.CompanyId, vehicle)
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
 		return
 	}
-	ctx.JSON(appresponse.Success(http.StatusCreated, list))
+	ctx.JSON(appresponse.Success(http.StatusCreated, isCreated))
 }
