@@ -35,5 +35,5 @@ type AppDB struct {
 
 type AppKey struct {
 	JwtSecretKey  string
-	JwtExpiryTime int
+	JwtExpiryHour int
 }

@@ -43,7 +43,7 @@ func (h *Handler) GetAuthCompany(ctx *gin.Context) {
 	ctx.JSON(appresponse.Success(http.StatusOK, auth))
 }
 
-func (h *Handler) GetAuthVehicle(ctx *gin.Context) {
+func (h *Handler) GetAuthSubUser(ctx *gin.Context) {
 
 	var request authmodel.AuthCompanyRequest
 

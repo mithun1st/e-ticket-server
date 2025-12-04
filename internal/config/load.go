@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -36,11 +37,14 @@ func Load() (*AppConfigModel, error) {
 		DbName: os.Getenv("DB_NAME_DEV"),
 	}
 
-	// expiry, _ := strconv.ParseInt(os.Getenv("JWT_EXPIRY_TIME"), 10, 64)
+	expiry, err := strconv.ParseInt(os.Getenv("JWT_EXPIRY_HOUR"), 10, 64)
+	if err != nil {
+		return nil, err
+	}
 
 	jwt := AppKey{
-		JwtSecretKey: os.Getenv("JWT_SECRET_KEY"),
-		// JwtExpiryTime: int(expiry),
+		JwtSecretKey:  os.Getenv("JWT_SECRET_KEY"),
+		JwtExpiryHour: int(expiry),
 	}
 
 	appConfig := AppConfigModel{

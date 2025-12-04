@@ -4,7 +4,10 @@ import (
 	"e-ticket/internal/config"
 	authmodel "e-ticket/internal/domain/auth/model"
 	authrepository "e-ticket/internal/domain/auth/repository"
+	subusermodel "e-ticket/internal/domain/sub_user/model"
+	"e-ticket/internal/middleware"
 	apptoken "e-ticket/pkg/token"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -18,15 +21,25 @@ func NewAuthService(repository authrepository.Repository) *Service {
 	return &Service{repository: &repository}
 }
 
-func _generateToken(auth authmodel.AuthEntity) (string, error) {
+func _generateToken(user subusermodel.UserEntity) (string, error) {
 	appConfigModel, _ := config.Load()
+	var tokenEntity middleware.TokenEnitty = middleware.TokenEnitty{
+		Id:        user.Id,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Phone:     user.Phone,
+		Email:     user.Email,
+		Time:      time.Now(),
+	}
 
-	token, err := apptoken.Encript(map[string]any{
-		"id":    auth.UserEntity.Id,
-		"email": auth.UserEntity.Email,
-		"phone": auth.UserEntity.Phone,
-		"time":  time.Now(),
-	}, appConfigModel.Keys.JwtSecretKey)
+	jsonData, _ := json.Marshal(tokenEntity)
+	var jsonMap map[string]any
+	err := json.Unmarshal(jsonData, &jsonMap)
+	if err != nil {
+		return "", err
+	}
+
+	token, err := apptoken.Encript(jsonMap, appConfigModel.Keys.JwtSecretKey)
 
 	return token, err
 }
@@ -55,7 +68,7 @@ func (s *Service) GetAuthCompany(email string, phone string, password string) (*
 	auth.Role = *role
 
 	// Load config model from env
-	token, err := _generateToken(auth)
+	token, err := _generateToken(*userEntity)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +104,7 @@ func (s *Service) GetAuthSubUser(companyId int, email string, phone string, pass
 	auth.Role = *subUserRole
 
 	// Load config model from env
-	token, err := _generateToken(auth)
+	token, err := _generateToken(*userEntity)
 	if err != nil {
 		return nil, err
 	}
