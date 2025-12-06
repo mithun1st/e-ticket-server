@@ -260,7 +260,7 @@ func (r *Repository) InsertRouteCounter(companyId int, routeId int, routeCounter
 		var str string = fmt.Sprintf(`(%d, %d, %d, %s, %s, %d)`,
 			routeId,
 			e.CounterId,
-			1,
+			companyId,
 			utils.DbNilToStr(e.Duration),
 			utils.DbNilToStr(e.Cost),
 			e.Serial,
@@ -291,8 +291,6 @@ INSERT INTO %s(
 
 		valueAsStr,
 	)
-
-	fmt.Println(sql)
 
 	resutl, err := r.db.PQ.Exec(sql)
 	if err != nil {
