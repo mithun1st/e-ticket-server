@@ -18,26 +18,17 @@ func RouteCounterRoutes(rg *gin.RouterGroup, db *appdatabase.DbEntity) {
 
 	routeCounterRouter := rg.Group("/counters")
 	{
-		// routeCounterRouter.GET("/:counterId", handler.GetRouteCounter)
 		routeCounterRouter.GET("", handler.GetCounters)
 		routeCounterRouter.POST("", handler.CreateCounter)
-		// routeCounterRouter.PUT(":routeCounterId")
-		// routeCounterRouter.DELETE("/:routeCounterId")
 	}
 	routeCounterRouter = rg.Group("/routes")
 	{
-		// routeCounterRouter.GET("/:routeId", handler.GetRouteCounter)
 		routeCounterRouter.GET("", handler.GetRoutes)
 		routeCounterRouter.POST("", handler.CreateRoute)
-		// routeCounterRouter.PUT(":routeCounterId")
-		// routeCounterRouter.DELETE("/:routeCounterId")
 	}
 	routeCounterRouter = rg.Group("/routecounters")
 	{
-		// routeCounterRouter.GET("/:routeCounterId", handler.GetRouteCounter)
-		// routeCounterRouter.GET("", handler.GetAllRouteCounter)
-		// routeCounterRouter.POST("")
-		// routeCounterRouter.PUT(":routeCounterId")
-		// routeCounterRouter.DELETE("/:routeCounterId")
+		routeCounterRouter.GET("/:routeId", handler.GetRouteCounters)
+		routeCounterRouter.POST("/:routeId", handler.CreateRouteCounter)
 	}
 }

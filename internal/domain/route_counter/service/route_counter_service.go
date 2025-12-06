@@ -52,3 +52,23 @@ func (s *Service) CreateRoute(companyId int, route routecountermodel.RouteCreate
 
 	return isCreated, nil
 }
+
+func (s *Service) GetRouteCounters(companyId int, routeId int) ([]routecountermodel.RouteCounterEntity, error) {
+
+	routes, err := s.repository.FindRouteCountersByCompanyAndRoute(companyId, routeId)
+	if err != nil {
+		return nil, err
+	}
+
+	return routes, nil
+}
+
+func (s *Service) CreateRouteCounter(companyId int, routeId int, routeCounters []routecountermodel.RouteCounterCreateEntity) (bool, error) {
+
+	isCreated, err := s.repository.InsertRouteCounter(companyId, routeId, routeCounters)
+	if err != nil {
+		return false, err
+	}
+
+	return isCreated, nil
+}

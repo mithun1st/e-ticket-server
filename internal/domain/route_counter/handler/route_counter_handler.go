@@ -19,7 +19,7 @@ func NewRouteCounterHandler(service routecounterservice.Service) *Handler {
 
 func (h *Handler) GetCounters(ctx *gin.Context) {
 
-	var uri routecountermodel.RouteCounterUri
+	var uri routecountermodel.RouteAndCounterUri
 
 	err := ctx.ShouldBindUri(&uri)
 	if err != nil {
@@ -38,7 +38,7 @@ func (h *Handler) GetCounters(ctx *gin.Context) {
 
 func (h *Handler) CreateCounter(ctx *gin.Context) {
 
-	var uri routecountermodel.RouteCounterUri
+	var uri routecountermodel.RouteAndCounterUri
 	var counter routecountermodel.CounterCreateEntity
 
 	err := ctx.ShouldBindUri(&uri)
@@ -63,7 +63,7 @@ func (h *Handler) CreateCounter(ctx *gin.Context) {
 
 func (h *Handler) GetRoutes(ctx *gin.Context) {
 
-	var uri routecountermodel.RouteCounterUri
+	var uri routecountermodel.RouteAndCounterUri
 
 	err := ctx.ShouldBindUri(&uri)
 	if err != nil {
@@ -81,7 +81,7 @@ func (h *Handler) GetRoutes(ctx *gin.Context) {
 
 func (h *Handler) CreateRoute(ctx *gin.Context) {
 
-	var uri routecountermodel.RouteCounterUri
+	var uri routecountermodel.RouteAndCounterUri
 	var route routecountermodel.RouteCreateEntity
 
 	err := ctx.ShouldBindUri(&uri)
@@ -97,6 +97,50 @@ func (h *Handler) CreateRoute(ctx *gin.Context) {
 	}
 
 	isCreated, err := h.service.CreateRoute(uri.CompanyId, route)
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
+		return
+	}
+	ctx.JSON(appresponse.Success(http.StatusCreated, isCreated))
+}
+
+func (h *Handler) GetRouteCounters(ctx *gin.Context) {
+
+	var uri routecountermodel.RouteCounterUri
+
+	err := ctx.ShouldBindUri(&uri)
+	if err != nil {
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
+		return
+	}
+
+	routeCounters, err := h.service.GetRouteCounters(uri.CompanyId, uri.RouteId)
+	if err != nil {
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
+		return
+	}
+	ctx.JSON(appresponse.Success(http.StatusOK, routeCounters))
+}
+
+func (h *Handler) CreateRouteCounter(ctx *gin.Context) {
+
+	var uri routecountermodel.RouteCounterUri
+	var routeCounters []routecountermodel.RouteCounterCreateEntity
+
+	err := ctx.ShouldBindUri(&uri)
+	if err != nil {
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
+		return
+	}
+
+	err = ctx.ShouldBindBodyWithJSON(&routeCounters)
+	if err != nil {
+		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
+		return
+	}
+
+	isCreated, err := h.service.CreateRouteCounter(uri.CompanyId, uri.RouteId, routeCounters)
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))

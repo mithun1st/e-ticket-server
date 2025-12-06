@@ -7,6 +7,7 @@ CREATE TABLE counter (
     address VARCHAR(200),
     lat VARCHAR(50),
     long VARCHAR(50),
+    note VARCHAR(200),
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -22,7 +23,6 @@ CREATE TABLE route_counter (
     route_id INT NOT NULL,
     counter_id INT NOT NULL,
     fk_company_id INT NOT NULL,
-    name VARCHAR(50) NOT NULL,
     duration INT,
     cost DECIMAL,
     serial INT NOT NULL,
