@@ -216,8 +216,8 @@ WHERE
 ORDER BY %s ASC
 `,
 		schema.RouteCounter_counter_id,
+		schema.RouteCounter_distance,
 		schema.RouteCounter_duration,
-		schema.RouteCounter_cost,
 		schema.RouteCounter_serial,
 
 		schema.RouteCounter,
@@ -239,8 +239,8 @@ ORDER BY %s ASC
 		var routeCounter routecountermodel.RouteCounterEntity
 		err := rows.Scan(
 			&routeCounter.CounterId,
+			&routeCounter.Distance,
 			&routeCounter.Duration,
-			&routeCounter.Cost,
 			&routeCounter.Serial,
 		)
 		if err != nil {
@@ -261,8 +261,8 @@ func (r *Repository) InsertRouteCounter(companyId int, routeId int, routeCounter
 			routeId,
 			e.CounterId,
 			companyId,
+			utils.DbNilToStr(e.Distance),
 			utils.DbNilToStr(e.Duration),
-			utils.DbNilToStr(e.Cost),
 			e.Serial,
 		)
 		values = append(values, str)
@@ -285,8 +285,8 @@ INSERT INTO %s(
 		schema.RouteCounter_route_id,
 		schema.RouteCounter_counter_id,
 		schema.RouteCounter_fk_company_id,
+		schema.RouteCounter_distance,
 		schema.RouteCounter_duration,
-		schema.RouteCounter_cost,
 		schema.RouteCounter_serial,
 
 		valueAsStr,

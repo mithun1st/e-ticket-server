@@ -23,8 +23,8 @@ CREATE TABLE route_counter (
     route_id INT NOT NULL,
     counter_id INT NOT NULL,
     fk_company_id INT NOT NULL,
+    distance DECIMAL,
     duration INT,
-    cost DECIMAL,
     serial INT NOT NULL,
     PRIMARY KEY (route_id, counter_id)
 );
