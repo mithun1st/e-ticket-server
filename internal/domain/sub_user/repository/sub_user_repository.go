@@ -80,7 +80,7 @@ FROM %s WHERE
 		schema.Users,
 
 		schema.Users_id,
-		utils.DbJoinArray(userIdList),
+		utils.DbValues(userIdList),
 	)
 
 	rows, err := r.db.PQ.Query(sql)

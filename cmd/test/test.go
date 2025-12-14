@@ -26,8 +26,8 @@ func main() {
 	// fmt.Println(nums[1])
 
 	fmt.Println(nums, alph)
-	fmt.Println(utils.DbJoinArray(nums))
-	fmt.Println(utils.DbJoinArray(alph))
+	// fmt.Println(utils.DbJoinArray(nums))
+	// fmt.Println(utils.DbJoinArray(alph))
 	return
 
 	appenviroment.Set(appenviroment.Development)
