@@ -5,7 +5,6 @@ import (
 	"e-ticket/internal/schema"
 	appdatabase "e-ticket/pkg/database"
 	"e-ticket/pkg/utils"
-	"fmt"
 )
 
 type Repository struct {
@@ -88,8 +87,6 @@ func (r *Repository) InsertSchedule(companyId int, schedule schedulemodel.Schedu
 		schedule.FkVehicleId,
 		schedule.StartAt,
 	) + ")"
-
-	fmt.Println(sql)
 
 	result, err := r.db.PQ.Exec(sql)
 	if err != nil {
