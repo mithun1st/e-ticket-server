@@ -39,6 +39,7 @@ func (r *Repository) FindSchedulesById(companyId int) (*[]schedulemodel.Schedule
 			schema.Schedule_fk_route_id,
 			schema.Schedule_fk_vehicle_id,
 			schema.Schedule_start_at,
+			schema.Schedule_repeats_daily,
 			"T1."+schema.Route_name,
 			"T2."+schema.Vehicles_name,
 		) +
@@ -62,6 +63,7 @@ func (r *Repository) FindSchedulesById(companyId int) (*[]schedulemodel.Schedule
 			&schedule.FkRouteId,
 			&schedule.FkVehicleId,
 			&schedule.StartAt,
+			&schedule.RepeatsDaily,
 			&schedule.RouteName,
 			&schedule.VehicleName,
 		)
@@ -81,11 +83,13 @@ func (r *Repository) InsertSchedule(companyId int, schedule schedulemodel.Schedu
 		schema.Schedule_fk_route_id,
 		schema.Schedule_fk_vehicle_id,
 		schema.Schedule_start_at,
+		schema.Schedule_repeats_daily,
 	) + ") VALUES (" + utils.DbValues(
 		companyId,
 		schedule.FkRouteId,
 		schedule.FkVehicleId,
 		schedule.StartAt,
+		schedule.RepeatsDaily,
 	) + ")"
 
 	result, err := r.db.PQ.Exec(sql)
