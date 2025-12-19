@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 )
 
 func _cast(data any) string {
@@ -35,6 +36,15 @@ func _cast(data any) string {
 			return nullStr
 		}
 		return fmt.Sprintf("%v", rv.Elem().Interface())
+
+	case *time.Time:
+		if value == nil {
+			return nullStr
+		}
+		return fmt.Sprintf("'%v'", (*value).Format(time.RFC3339))
+
+	case time.Time:
+		return fmt.Sprintf("'%v'", value.Format(time.RFC3339))
 
 	default:
 		return fmt.Sprintf("%v", value)

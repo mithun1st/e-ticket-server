@@ -1,4 +1,4 @@
-package router
+package routecounterrouter
 
 import (
 	routecounterhandler "e-ticket/internal/domain/route_counter/handler"

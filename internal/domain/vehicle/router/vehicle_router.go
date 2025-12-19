@@ -1,4 +1,4 @@
-package router
+package vehiclerouter
 
 import (
 	vehiclehandler "e-ticket/internal/domain/vehicle/handler"

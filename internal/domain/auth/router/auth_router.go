@@ -1,4 +1,4 @@
-package router
+package authrouter
 
 import (
 	authhandler "e-ticket/internal/domain/auth/handler"

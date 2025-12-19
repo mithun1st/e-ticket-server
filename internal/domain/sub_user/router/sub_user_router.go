@@ -1,4 +1,4 @@
-package router
+package subuserrouter
 
 import (
 	subuserhandler "e-ticket/internal/domain/sub_user/handler"
