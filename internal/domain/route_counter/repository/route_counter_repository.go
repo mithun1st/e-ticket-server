@@ -203,30 +203,49 @@ INSERT INTO %s(
 
 func (r *Repository) FindRouteCountersByCompanyAndRoute(companyId int, routeId int) ([]routecountermodel.RouteCounterEntity, error) {
 
-	var sql string = fmt.Sprintf(`
-SELECT
-%s,
-%s,
-%s,
-%s
-FROM %s
-WHERE
-%s=%d AND
-%s=%d
-ORDER BY %s ASC
-`,
+	// 	var sql string = fmt.Sprintf(`
+	// SELECT
+	// %s,
+	// %s,
+	// %s,
+	// %s
+	// FROM %s
+	// WHERE
+	// %s=%d AND
+	// %s=%d
+	// ORDER BY %s ASC
+	// `,
+	// 		schema.RouteCounter_counter_id,
+	// 		schema.RouteCounter_distance,
+	// 		schema.RouteCounter_duration,
+	// 		schema.RouteCounter_serial,
+
+	// 		schema.RouteCounter,
+
+	// 		schema.RouteCounter_fk_company_id, companyId,
+	// 		schema.RouteCounter_route_id, routeId,
+
+	// 		schema.RouteCounter_serial,
+	// 	)
+
+	var sql string = "WITH T1 AS (" +
+		" SELECT " + utils.DbNames(
+		schema.Counter_id,
+		schema.Counter_name,
+	) +
+		" FROM " + schema.Counter +
+		" ) SELECT " + utils.DbNames(
 		schema.RouteCounter_counter_id,
 		schema.RouteCounter_distance,
 		schema.RouteCounter_duration,
 		schema.RouteCounter_serial,
-
-		schema.RouteCounter,
-
-		schema.RouteCounter_fk_company_id, companyId,
-		schema.RouteCounter_route_id, routeId,
-
-		schema.RouteCounter_serial,
-	)
+		schema.Counter_name,
+	) +
+		" FROM " + schema.RouteCounter +
+		" LEFT JOIN T1" +
+		" ON T1." + schema.Counter_id + "=" + schema.RouteCounter + "." + schema.RouteCounter_counter_id +
+		" WHERE " + schema.RouteCounter_fk_company_id + "=" + utils.DbValues(companyId) +
+		" AND " + schema.RouteCounter_route_id + "=" + utils.DbValues(routeId)
 
 	rows, err := r.db.PQ.Query(sql)
 	if err != nil {
@@ -242,6 +261,7 @@ ORDER BY %s ASC
 			&routeCounter.Distance,
 			&routeCounter.Duration,
 			&routeCounter.Serial,
+			&routeCounter.CounterName,
 		)
 		if err != nil {
 			return nil, err
