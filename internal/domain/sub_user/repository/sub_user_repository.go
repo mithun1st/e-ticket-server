@@ -58,7 +58,8 @@ AND
 	return userIds, nil
 }
 
-func (r *Repository) FindUsersByIds(userIdList []int) ([]subusermodel.UserEntity, error) {
+func (r *Repository) FindUsersByIds(userIds []int) ([]subusermodel.UserEntity, error) {
+
 	var sql string = fmt.Sprintf(`
 SELECT
 %s,
@@ -80,9 +81,15 @@ FROM %s WHERE
 		schema.Users,
 
 		schema.Users_id,
-		utils.DbValues(userIdList),
+		utils.DbValues(
+			utils.ModelsToElements(
+				userIds,
+				func(id int) any {
+					return id
+				},
+			)...,
+		),
 	)
-
 	rows, err := r.db.PQ.Query(sql)
 	if err != nil {
 		return nil, err
