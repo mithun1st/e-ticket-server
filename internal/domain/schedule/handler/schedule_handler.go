@@ -20,14 +20,16 @@ func NewScheduleHandler(service scheduleservice.Service) *Handler {
 func (h *Handler) GetSchedules(ctx *gin.Context) {
 
 	var uri schedulemodel.ScheduleUri
+	var query schedulemodel.ScheduleQuery
 
 	err := ctx.ShouldBindUri(&uri)
+	err = ctx.ShouldBindQuery(&query)
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))
 		return
 	}
 
-	schedules, err := h.service.GetSchedulesById(uri.CompanyId)
+	schedules, err := h.service.GetSchedulesById(uri.CompanyId, query.Date)
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(appresponse.Error(http.StatusBadRequest, err))

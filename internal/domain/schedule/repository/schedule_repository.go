@@ -7,6 +7,7 @@ import (
 	appenviroment "e-ticket/pkg/enviroment"
 	applogger "e-ticket/pkg/logger"
 	"e-ticket/pkg/utils"
+	"time"
 )
 
 type Repository struct {
@@ -17,7 +18,7 @@ func NewScheduleRepository(db *appdatabase.DbEntity) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindSchedulesById(companyId int) (*[]schedulemodel.ScheduleEntity, error) {
+func (r *Repository) FindSchedulesById(companyId int, date time.Time) (*[]schedulemodel.ScheduleEntity, error) {
 
 	var sql string = "WITH T1 AS ( SELECT " +
 		utils.DbNames(
@@ -49,7 +50,9 @@ func (r *Repository) FindSchedulesById(companyId int) (*[]schedulemodel.Schedule
 		" LEFT JOIN T1 ON " + schema.Schedule_fk_route_id + " = T1." + schema.Route_id +
 		" LEFT JOIN T2 ON " + schema.Schedule_fk_vehicle_id + " = T2." + schema.Vehicles_id +
 		" WHERE " + schema.Schedule_fk_company_id +
-		" = " + utils.DbValues(companyId) +
+		" = " + utils.DbValues(companyId) + " AND " +
+		"(" + schema.Schedule_start_at + "::DATE=" + utils.DbValues(date) + "::DATE" +
+		" OR " + schema.Schedule_repeats_daily + "=" + utils.DbValues(true) + ")" +
 		" ORDER BY " + schema.Schedule_start_at +
 		" ASC"
 

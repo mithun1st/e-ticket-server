@@ -3,6 +3,7 @@ package scheduleservice
 import (
 	schedulemodel "e-ticket/internal/domain/schedule/model"
 	schedulerepository "e-ticket/internal/domain/schedule/repository"
+	"time"
 )
 
 type Service struct {
@@ -13,9 +14,9 @@ func NewScheduleService(repository schedulerepository.Repository) *Service {
 	return &Service{repository: &repository}
 }
 
-func (s *Service) GetSchedulesById(companyId int) (*[]schedulemodel.ScheduleEntity, error) {
+func (s *Service) GetSchedulesById(companyId int, date time.Time) (*[]schedulemodel.ScheduleEntity, error) {
 
-	schedules, err := s.repository.FindSchedulesById(companyId)
+	schedules, err := s.repository.FindSchedulesById(companyId, date)
 	if err != nil {
 		return nil, err
 	}
