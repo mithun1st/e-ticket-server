@@ -4,6 +4,8 @@ import (
 	homemodel "e-ticket/internal/domain/home/model"
 	"e-ticket/internal/schema"
 	appdatabase "e-ticket/pkg/database"
+	appenviroment "e-ticket/pkg/enviroment"
+	applogger "e-ticket/pkg/logger"
 	"fmt"
 )
 
@@ -41,6 +43,9 @@ FROM %s WHERE(
 		schema.CompaniesFkCompanyOwnerId, companyOwnerId,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
 
 	if err != nil {
@@ -114,6 +119,9 @@ func (r *Repository) FindVehiclesByCompanies(companyIds []int) ([]homemodel.Vehi
 	// 		utils.JoinArray(companyIds),
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
 
 	if err != nil {
@@ -190,6 +198,9 @@ func (r *Repository) FindOwnersByVehicles(vehiclesIds []int) ([]homemodel.OwnerE
 	// 		schema.Users, schema.Users_id,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
 
 	if err != nil {
@@ -256,6 +267,9 @@ func (r *Repository) FindVehiclesByOwner(vehicleOwnerId int) ([]homemodel.Vehicl
 	// 		vehicleOwnerId,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
 
 	if err != nil {

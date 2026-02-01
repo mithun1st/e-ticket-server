@@ -4,6 +4,8 @@ import (
 	routecountermodel "e-ticket/internal/domain/route_counter/model"
 	"e-ticket/internal/schema"
 	appdatabase "e-ticket/pkg/database"
+	appenviroment "e-ticket/pkg/enviroment"
+	applogger "e-ticket/pkg/logger"
 	"e-ticket/pkg/utils"
 	"fmt"
 	"strings"
@@ -44,7 +46,11 @@ WHERE
 
 		schema.Counter_fk_company_id, companyId)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
+
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +112,11 @@ INSERT INTO %s(
 		utils.DbNilToStr(counter.Long),
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	resutl, err := r.db.PQ.Exec(sql)
+
 	if err != nil {
 		return false, err
 	}
@@ -141,7 +151,11 @@ WHERE
 		schema.Route_fk_company_id, companyId,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
+
 	if err != nil {
 		return nil, err
 	}
@@ -188,7 +202,11 @@ INSERT INTO %s(
 		utils.DbNilToStr(route.Note),
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	resutl, err := r.db.PQ.Exec(sql)
+
 	if err != nil {
 		return false, err
 	}
@@ -247,7 +265,11 @@ func (r *Repository) FindRouteCountersByCompanyAndRoute(companyId int, routeId i
 		" WHERE " + schema.RouteCounter_fk_company_id + "=" + utils.DbValues(companyId) +
 		" AND " + schema.RouteCounter_route_id + "=" + utils.DbValues(routeId)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
+
 	if err != nil {
 		return nil, err
 	}
@@ -312,7 +334,11 @@ INSERT INTO %s(
 		valueAsStr,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	resutl, err := r.db.PQ.Exec(sql)
+
 	if err != nil {
 		return false, err
 	}

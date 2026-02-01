@@ -4,6 +4,8 @@ import (
 	schedulemodel "e-ticket/internal/domain/schedule/model"
 	"e-ticket/internal/schema"
 	appdatabase "e-ticket/pkg/database"
+	appenviroment "e-ticket/pkg/enviroment"
+	applogger "e-ticket/pkg/logger"
 	"e-ticket/pkg/utils"
 )
 
@@ -51,7 +53,11 @@ func (r *Repository) FindSchedulesById(companyId int) (*[]schedulemodel.Schedule
 		" ORDER BY " + schema.Schedule_start_at +
 		" ASC"
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
+
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +98,11 @@ func (r *Repository) InsertSchedule(companyId int, schedule schedulemodel.Schedu
 		schedule.RepeatsDaily,
 	) + ")"
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	result, err := r.db.PQ.Exec(sql)
+
 	if err != nil {
 		return false, err
 	}

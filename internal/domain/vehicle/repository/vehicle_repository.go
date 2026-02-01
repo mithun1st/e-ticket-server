@@ -4,6 +4,8 @@ import (
 	vehiclemodel "e-ticket/internal/domain/vehicle/model"
 	"e-ticket/internal/schema"
 	appdatabase "e-ticket/pkg/database"
+	appenviroment "e-ticket/pkg/enviroment"
+	applogger "e-ticket/pkg/logger"
 	"e-ticket/pkg/utils"
 	"fmt"
 )
@@ -54,7 +56,11 @@ AND
 		sql = sql + str
 	}
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
+
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +128,11 @@ INSERT INTO %s(
 		vehicle.Capacity,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	resutl, err := r.db.PQ.Exec(sql)
+
 	if err != nil {
 		return false, err
 	}

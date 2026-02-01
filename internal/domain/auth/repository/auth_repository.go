@@ -4,6 +4,8 @@ import (
 	subusermodel "e-ticket/internal/domain/sub_user/model"
 	"e-ticket/internal/schema"
 	appdatabase "e-ticket/pkg/database"
+	appenviroment "e-ticket/pkg/enviroment"
+	applogger "e-ticket/pkg/logger"
 	"fmt"
 )
 
@@ -45,6 +47,9 @@ FROM %s WHERE(
 		schema.Users_password_hash, password,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
 
 	if err != nil {
@@ -87,6 +92,9 @@ FROM %s WHERE(
 		ownerId,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
 
 	if err != nil {
@@ -127,6 +135,9 @@ FROM %s WHERE(
 		ownerId,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
 
 	if err != nil {

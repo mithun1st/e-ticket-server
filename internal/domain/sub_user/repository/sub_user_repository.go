@@ -4,6 +4,8 @@ import (
 	subusermodel "e-ticket/internal/domain/sub_user/model"
 	"e-ticket/internal/schema"
 	appdatabase "e-ticket/pkg/database"
+	appenviroment "e-ticket/pkg/enviroment"
+	applogger "e-ticket/pkg/logger"
 	"e-ticket/pkg/utils"
 	"fmt"
 )
@@ -40,7 +42,12 @@ AND
 		)
 		sql = sql + str
 	}
+
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
+
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +97,12 @@ FROM %s WHERE
 			)...,
 		),
 	)
+
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
+
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +150,11 @@ FROM %s WHERE
 		phone,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	rows, err := r.db.PQ.Query(sql)
+
 	if err != nil {
 		return nil, err
 	}
@@ -197,7 +213,11 @@ INSERT INTO %s (
 		password,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	result, err := r.db.PQ.Exec(sql)
+
 	if err != nil {
 		return false, err
 	}
@@ -236,7 +256,11 @@ INSERT INTO %s (
 		role,
 	)
 
+	if appenviroment.GetCuerrentStatus() == appenviroment.Development {
+		applogger.Info(sql)
+	}
 	result, err := r.db.PQ.Exec(sql)
+
 	if err != nil {
 		return false, err
 	}
